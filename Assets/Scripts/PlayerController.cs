@@ -1,4 +1,5 @@
 using UnityEngine;
+// using static UnityEngine.Rendering.DynamicArray<T>;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,7 +15,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private KeyCode KeyInteract;
     [SerializeField] private KeyCode KeyDrop;
 
-    private bool itemHeld = false;
+    [SerializeField] private Transform _interactionPoint;
+    [SerializeField] private float _interactionPointRadius;
+    [SerializeField] private LayerMask _interactableMask;
+    private readonly Collider[] _colliders = new Collider[1];
+    [SerializeField] private bool hasItem = false;
+    [SerializeField] private Item robotItem;
 
     // Update is called once per frame
     void Update()
@@ -30,7 +36,7 @@ public class PlayerController : MonoBehaviour
             moveZ++;
         }if(Input.GetKey(KeyLeft)){
             moveX--;
-        }if(Input.GetKey(KeyDown)){
+        }if(Input.GetKey(KeyDown) ){
             moveZ--;
         }if(Input.GetKey(KeyRight)){
             moveX++;
@@ -47,21 +53,66 @@ public class PlayerController : MonoBehaviour
         transform.position = new Vector3(transform.position.x + (moveX*moveSpeedf*Time.deltaTime), 0, transform.position.z + (moveZ*moveSpeedf*Time.deltaTime));
     }
 
-    private void InteractWith(){
+    private void InteractWith()
+    {
         Debug.Log("Interacted");
 
-        //Chest
-        //Wenn noch kein Component in der Hand, aufnehmen 
+        int _numFound;
+        _numFound = Physics.OverlapSphereNonAlloc(_interactionPoint.position, _interactionPointRadius, _colliders, _interactableMask);
 
-        //WorkBench
-        // Item abgeben
+        if (_numFound == 1)
+        {
+            var interactableWorkStation = _colliders[0].GetComponent<WorkStation>();
+            var interactableChest = _colliders[0].GetComponent<ComponentChest>();
+            var interactableBaby = _colliders[0].GetComponent<BabySystem>();
 
-        //Baby
-        // Item abgeben
+
+            if (interactableChest != null && !hasItem)
+            {
+                robotItem = interactableChest.GiveComponent();
+                hasItem = true;
+            }
+            else if (interactableWorkStation != null)
+            {
+                if (hasItem)
+                {
+                    if (robotItem != null)
+                    {
+                        robotItem = interactableWorkStation.AddNewComponent(robotItem);
+                        if (robotItem == null)
+                        {
+                            hasItem = false;
+                        }
+                    }
+                    Debug.Log("The robotItem is NULL!!!!!");
+                }
+                else
+                {
+                    interactableWorkStation.ClearWorkSpace();
+                }
+            }
+            else if (interactableBaby != null && hasItem)
+            {
+                if (robotItem != null)
+                {
+                    robotItem = interactableBaby.DeliverItem(robotItem);
+                    if (robotItem == null)
+                    {
+                        hasItem = false;
+                    }
+                }
+                Debug.Log("The robotItem is NULL!!!!!");
+            }
+        }
     }
 
-    private void DropItem(){
-        if(itemHeld) itemHeld = false;
+    private void DropItem()
+    {
+        if (hasItem)
+        {
+            hasItem = false;
+            robotItem = null;
+        }
         Debug.Log("Item Dropped");
     }
 }
