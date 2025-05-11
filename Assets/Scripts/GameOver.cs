@@ -5,7 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
 {
-   
+    public SoundFXManager SoundFXManager;
+
+    public void ButtonSound()
+    {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.menuClickSound, transform, 1.0f);
+    }
+
     public void RetryButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);

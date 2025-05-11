@@ -1,25 +1,24 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class Won : MonoBehaviour
 {
     public SoundFXManager SoundFXManager;
+
     public void ButtonSound()
     {
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.menuClickSound, transform, 1.0f);
     }
 
-    public void Play()
+    public void RetryButton()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);
     }
 
-    public void Quit()
+    public void MainMenuButton()
     {
-        Application.Quit();
-        Debug.Log("Player has quit the game");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 3);
     }
 }
-  

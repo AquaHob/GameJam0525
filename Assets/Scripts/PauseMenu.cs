@@ -7,6 +7,7 @@ public class PauseMenu : MonoBehaviour
 {
     public static bool Paused = false;
     public GameObject PauseMenuCanvas;
+    public SoundFXManager SoundFXManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,6 +30,11 @@ public class PauseMenu : MonoBehaviour
             }
 
         }
+    }
+
+    public void ButtonSound()
+    {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.menuClickSound, transform, 1.0f);
     }
 
     void Stop()
