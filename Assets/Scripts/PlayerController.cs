@@ -4,8 +4,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeedf = 1.0f;
-    public int moveX = 0;
-    public int moveZ = 0;
+    public float moveX = 0.0f;
+    public float moveZ = 0.0f;
 
     [Header("Player Inputs")]
     [SerializeField] private KeyCode KeyUp;
@@ -22,6 +22,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool hasItem = false;
     [SerializeField] private Item robotItem;
 
+    void Start()
+    {
+        moveX = 0.0f;
+        moveZ = 6.0f;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -29,18 +35,29 @@ public class PlayerController : MonoBehaviour
     }
 
     private void CheckPlayerInput(){
-        moveX = 0;
-        moveZ = 0;
+        //moveX = 0.0f;
+        //moveZ = 0.0f;
 
-        if(Input.GetKey(KeyUp)){
-            moveZ++;
+        moveZ = Input.GetAxis("Vertical");
+        moveX = Input.GetAxis("Horizontal");
+
+        /*if(Input.GetKey(KeyUp)){
+            //moveZ++;
+            moveZ = Input.GetAxis("Vertical2");
         }if(Input.GetKey(KeyLeft)){
-            moveX--;
-        }if(Input.GetKey(KeyDown) ){
-            moveZ--;
-        }if(Input.GetKey(KeyRight)){
-            moveX++;
-        }if(Input.GetKeyDown(KeyInteract)){
+            //moveX--;
+            moveX = Input.GetAxis("Horizontal2");
+        }
+        if(Input.GetKey(KeyDown) ){
+            //moveZ--;
+            moveZ = Input.GetAxis("Vertical2");
+        }
+        if(Input.GetKey(KeyRight)){
+            // moveX++;
+            moveX = Input.GetAxis("Horizontal2");
+        }*/
+
+        if (Input.GetKeyDown(KeyInteract)){
             InteractWith();
         }if(Input.GetKeyDown(KeyDrop)){
             DropItem();
@@ -49,8 +66,8 @@ public class PlayerController : MonoBehaviour
         MoveCharacter(moveX, moveZ);
     }
 
-    private void MoveCharacter(int moveX, int moveZ){
-        transform.position = new Vector3(transform.position.x + (moveX*moveSpeedf*Time.deltaTime), 0, transform.position.z + (moveZ*moveSpeedf*Time.deltaTime));
+    private void MoveCharacter(float moveX, float moveZ){
+        transform.position = new Vector3(transform.position.x + (moveX*moveSpeedf*Time.deltaTime), 1, transform.position.z + (moveZ*moveSpeedf*Time.deltaTime));
     }
 
     private void InteractWith()

@@ -33,10 +33,10 @@ public class BabySystem : MonoBehaviour
 
     void Start(){
         // fill NextMainItems
-        foreach(Item cI in MainItemsList){
-            NextMainItems.Enqueue(cI);
-        }
-        SetupNextMainItem();
+        //foreach(Item cI in MainItemsList){
+        //    NextMainItems.Enqueue(cI);
+        //}
+        //SetupNextMainItem();
 
         // StartBabyHappinessLoop
     }
